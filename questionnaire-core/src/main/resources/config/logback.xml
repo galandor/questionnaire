@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} %-5level [%thread] %logger{36}:%line %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<appender name="mobile-platform-syslog" class="ch.qos.logback.classic.net.SyslogAppender">-->
+        <!--<syslogHost>localhost</syslogHost>-->
+        <!--<facility>LOCAL0</facility>-->
+        <!--<suffixPattern>%d{dd.MM.yyyy HH:mm:ss.SSS} %-5level [%thread] %logger{36}:%line %msg%n</suffixPattern>-->
+    <!--</appender>-->
+
+    <!--<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--&lt;!&ndash;See http://logback.qos.ch/manual/appenders.html#RollingFileAppender&ndash;&gt;-->
+        <!--&lt;!&ndash;and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy&ndash;&gt;-->
+        <!--&lt;!&ndash;for further documentation&ndash;&gt;-->
+        <!--<append>true</append>-->
+        <!--<File>logs/mobile.platform.log</File>-->
+        <!--<encoder>-->
+            <!--<pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} %-5level [%thread] %logger{36}:%line %msg%n</pattern>-->
+        <!--</encoder>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<fileNamePattern>logs/mobile.platform.log.%d{yyyy-MM-dd}</fileNamePattern>-->
+        <!--</rollingPolicy>-->
+    <!--</appender>-->
+
+    <logger name="org.springframework.remoting.support.RemoteInvocationTraceInterceptor" level="OFF"/>
+
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+        <!--<appender-ref ref="file"/>-->
+    </root>
+
+</configuration>
