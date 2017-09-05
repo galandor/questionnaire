@@ -1,5 +1,8 @@
 package ru.galandor.questionnaire;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 /**
  * Created by sorlov on 9/4/17.
  */

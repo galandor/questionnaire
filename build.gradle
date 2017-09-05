@@ -14,19 +14,43 @@ buildscript {
     }
 }
 
+
+
 subprojects {
-    group   "ru.galandor"
+    group 'ru.galandor'
+    version '1.0-SNAPSHOT'
+
     ext {
         postgresqlVersion  = "9.4.1208"
     }
+
+    apply plugin: 'java'
+    apply plugin: "org.springframework.boot"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    bootRepackage {
+        enabled = false
+    }
+
+    sourceCompatibility = 1.8
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot-starter")
+        compile ("org.springframework.boot:spring-boot-starter-web");
+
+        testCompile("org.springframework.boot:spring-boot-starter-test")
+    }
+
+    bootRun {
+        // support passing -Dsystem.property=value to bootRun task
+        systemProperties = System.properties
+    }
+
 }
-
-
-
-apply plugin: 'java'
-apply plugin: "org.springframework.boot"
-
-sourceCompatibility = 1.8
 
 
 repositories {
@@ -34,6 +58,4 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
 
-}
