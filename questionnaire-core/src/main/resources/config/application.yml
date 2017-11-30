@@ -6,7 +6,7 @@ liquibase:
   change-log: classpath:liquibase/migration.yml
   contexts: common
 spring.datasource:
-  url: jdbc:postgresql://postgresql-questionnaire:5432/mp?currentSchema=questionnaire&connectTimeout=120
+  url: jdbc:postgresql://postgresql-questionnaire:5432/galandor?currentSchema=questionnaire&connectTimeout=120
   username: galandor
   password: qwerty
   min-idle: 4
