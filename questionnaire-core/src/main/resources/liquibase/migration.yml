@@ -1,5 +1,3 @@
 databaseChangeLog:
    - include:
-      file: classpath:liquibase/migration/0-changing_package.sql
-   - include:
       file: classpath:liquibase/migration/2017-09-05-bootstrap.sql

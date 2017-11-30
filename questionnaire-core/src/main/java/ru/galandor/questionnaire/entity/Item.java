@@ -1,6 +1,7 @@
 package ru.galandor.questionnaire.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,6 +23,8 @@ public class Item implements Serializable{
     @Id
     private Long id;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private Type type;
 

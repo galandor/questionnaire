@@ -1,6 +1,7 @@
 package ru.galandor.questionnaire.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class CurrentItem {
     @Column(name = "user_id")
     private UUID userId;
 
+    @NotNull
     @Column(name = "item_id")
     private Long itemId;
 
