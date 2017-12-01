@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.IOException;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,6 +113,15 @@ public abstract class QuestionnaireApplicationTest {
         log.info("Result {}", response);
 
         return (P)objectMapper.readValue(response, typeReference);
+    }
+
+    protected  void performDelete(String path, int status) throws Exception {
+        MvcResult result = mockMvc.perform(delete(path))
+                .andExpect(status().is(status))
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        log.info("Result {}", response);
     }
 
 }
