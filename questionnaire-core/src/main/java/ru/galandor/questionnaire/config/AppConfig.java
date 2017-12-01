@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import ru.galandor.questionnaire.utils.JsonDateDeserializer;
+import ru.galandor.questionnaire.utils.JsonDateSerializer;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +31,11 @@ public class AppConfig {
         mapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        SimpleModule javaTimeModule = new SimpleModule();
+        javaTimeModule.addSerializer(LocalDateTime.class, new JsonDateSerializer());
+        javaTimeModule.addDeserializer(LocalDateTime.class, new JsonDateDeserializer());
+        mapper.registerModule(javaTimeModule);
         return mapper;
     }
 }
