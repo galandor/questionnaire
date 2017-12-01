@@ -1,9 +1,12 @@
 package ru.galandor.questionnaire.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.UUID;
 
 /**
@@ -21,9 +24,11 @@ public class CurrentItem {
     @Column(name = "item_id")
     private Long itemId;
 
+    @JsonIgnore
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
@@ -63,9 +68,9 @@ public class CurrentItem {
     @PreUpdate
     public void onUpdate() {
         if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now(ZoneId.of("UTF-8"));
+            this.createdAt = LocalDateTime.now(ZoneOffset.UTC);
         }
 
-        this.updatedAt = LocalDateTime.now(ZoneId.of("UTF-8"));
+        this.updatedAt = LocalDateTime.now(ZoneOffset.UTC);
     }
 }

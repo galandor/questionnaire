@@ -1,5 +1,7 @@
 package ru.galandor.questionnaire;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -8,12 +10,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by sorlov on 11/30/17.
@@ -39,22 +51,67 @@ public abstract class QuestionnaireApplicationTest {
         protected final Logger log = LoggerFactory.getLogger(getClass());
 
         @Autowired
-        protected ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
-        protected MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
-//        @Autowired
-//        protected RestTemplate restTemplate;
+    //        @Autowired
+    //        protected RestTemplate restTemplate;
 
-        @Autowired
-        private WebApplicationContext webContext;
+    @Autowired
+    private WebApplicationContext webContext;
 
-        @Before
-        public void setup() throws Exception {
-                MockitoAnnotations.initMocks(this);
-                this.mockMvc = MockMvcBuilders
-                        .webAppContextSetup(webContext)
-                        .build();
+    @Before
+    public void setup() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        this.mockMvc = MockMvcBuilders
+            .webAppContextSetup(webContext)
+            .build();
+}
+
+    protected  <T> MockHttpServletRequestBuilder postRequest(String path, T body){
+
+        MockHttpServletRequestBuilder builder = post(path)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON);
+
+        if(body != null){
+
+            String json = null;
+            try {
+                    json = objectMapper.writeValueAsString(body );
+            } catch (JsonProcessingException e) {
+                    log.error("Error while content serialization - {}", e);
+            }
+            return builder.content(json);
         }
+
+        return builder;
+    }
+
+    protected  <T, P> P performPost(String path, T body, int status, Class<P> responseClass) throws Exception {
+        MvcResult result = mockMvc.perform(postRequest(path, body))
+                .andExpect(status().is(status))
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        log.info("Result {}", response);
+
+        if (String.class.isAssignableFrom(responseClass)) {
+            return (P)response;
+        }
+        return objectMapper.readValue(response, responseClass);
+    }
+
+    protected  <T, P> P performGet(String path, int status, TypeReference typeReference) throws Exception {
+        MvcResult result = mockMvc.perform(get(path))
+                .andExpect(status().is(status))
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+
+        log.info("Result {}", response);
+
+        return (P)objectMapper.readValue(response, typeReference);
+    }
 
 }
