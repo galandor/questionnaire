@@ -2,17 +2,11 @@ package ru.galandor.questionnaire.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.web.servlet.MvcResult;
 import ru.galandor.questionnaire.QuestionnaireApplicationTest;
 import ru.galandor.questionnaire.entity.Item;
 
 import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by sorlov on 11/30/17.
@@ -31,7 +25,7 @@ public class QuestionnaireAdminControllerTest extends QuestionnaireApplicationTe
     public void adminPositiveTest() throws Exception {
 
         // add item
-        Item item = addItem(new Item(null, Item.Type.QUESTION, "How are you?", null, null));
+        Item item = addItem(new Item(null, Item.Type.QUESTION, "How are you?", null, null, true));
         Assert.assertEquals(Item.Type.QUESTION, item.getType());
         Assert.assertEquals("How are you?", item.getText());
 

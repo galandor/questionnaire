@@ -22,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -49,9 +50,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @Transactional
 public abstract class QuestionnaireApplicationTest {
-        protected final Logger log = LoggerFactory.getLogger(getClass());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-        @Autowired
+    protected final static UUID TEST_USER = UUID.randomUUID();
+
+    @Autowired
     protected ObjectMapper objectMapper;
 
     protected MockMvc mockMvc;

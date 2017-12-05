@@ -7,6 +7,7 @@ type VARCHAR(64) NOT NULL,
 text TEXT,
 next_item_id bigint REFERENCES "item" ("id") ON DELETE CASCADE ON UPDATE NO ACTION,
 parent_item_id bigint REFERENCES "item" ("id") ON DELETE CASCADE ON UPDATE NO ACTION,
+is_first boolean NOT NULL DEFAULT false,
 created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL
 );

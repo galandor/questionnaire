@@ -9,4 +9,5 @@ import ru.galandor.questionnaire.entity.Item;
  */
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+    Item findFirstByFirst(boolean first);
 }

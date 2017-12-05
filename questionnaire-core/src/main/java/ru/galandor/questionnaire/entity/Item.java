@@ -49,15 +49,19 @@ public class Item implements Serializable{
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "is_first")
+    private boolean first;
+
     public Item() {
     }
 
-    public Item(Long id, Type type, String text, Long nextItemId, Long parentItemId) {
+    public Item(Long id, Type type, String text, Long nextItemId, Long parentItemId, boolean first) {
         this.id = id;
         this.type = type;
         this.text = text;
         this.nextItemId = nextItemId;
         this.parentItemId = parentItemId;
+        this.first = first;
     }
 
     public Long getId() {
@@ -114,6 +118,14 @@ public class Item implements Serializable{
 
     public void setParentItemId(Long parentItemId) {
         this.parentItemId = parentItemId;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
+
+    public void setFirst(boolean first) {
+        this.first = first;
     }
 
     @PrePersist

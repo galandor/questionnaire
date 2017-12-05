@@ -1,6 +1,7 @@
 package ru.galandor.questionnaire.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import ru.galandor.questionnaire.entity.Item;
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by sorlov on 11/30/17.
  */
 @RestController
+@Service
 @RequestMapping("admin/item")
 public class QuestionnaireAdminController {
 
