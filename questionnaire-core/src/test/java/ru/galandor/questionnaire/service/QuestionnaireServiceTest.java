@@ -1,12 +1,14 @@
 package ru.galandor.questionnaire.service;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.galandor.questionnaire.QuestionnaireApplicationTest;
 import ru.galandor.questionnaire.controller.QuestionnaireAdminController;
 import ru.galandor.questionnaire.entity.Item;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -20,8 +22,8 @@ public class QuestionnaireServiceTest extends QuestionnaireApplicationTest {
     @Autowired
     private QuestionnaireService questionnaireService;
 
-    @Test
-    public void getNextItemText() {
+    @Before
+    public void init() {
         List<Item> items = Arrays.asList(
                 new Item(null, Item.Type.MESSAGE, "Hello", null, null, true),
                 new Item(null, Item.Type.MESSAGE, "How are you?", null, null, false)
@@ -34,12 +36,17 @@ public class QuestionnaireServiceTest extends QuestionnaireApplicationTest {
             item.setNextItemId(nextItem != null ? nextItem.getId() : null);
             nextItem = questionnaireAdminController.add(item);
         }
+    }
 
-        // fetch next item
+    @Test
+    public void getNextItemText() {
+
+
+        // fetch item for new user
         Item firsttem = questionnaireService.getNextItem(TEST_USER);
         Assert.assertNotNull(firsttem);
 
-        // fetch item for new user
+        // fetch next item
         Item currentItem = questionnaireService.moveToNextItem(TEST_USER);
         Assert.assertNotNull(currentItem);
 

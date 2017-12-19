@@ -97,10 +97,13 @@ public class QuestionnaireService {
 
         moveToNextItem(userId, currentItem);
 
-
     }
 
     public void saveAnswer(UUID userId, Object value) {
+        Item currentItem = getCurrentItem(userId);
+        Assert.isTrue(currentItem != null, "Current item of this user is null");
+        Assert.isTrue(currentItem.getType() == Item.Type.INPUT, "Current item is not input type");
+
 
     }
 }
