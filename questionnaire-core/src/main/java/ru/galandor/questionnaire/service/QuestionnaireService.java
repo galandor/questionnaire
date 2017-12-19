@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import ru.galandor.questionnaire.entity.CurrentItem;
 import ru.galandor.questionnaire.entity.Item;
 import ru.galandor.questionnaire.repository.CurrentItemRepository;
@@ -30,27 +31,49 @@ public class QuestionnaireService {
     }
 
     public Item getNextItem(UUID userId) {
-        CurrentItem currentUserItem = currentItemRepository.findOne(userId);
 
-        Long currentItemId = (currentUserItem != null) ? currentUserItem.getItemId() : null;
+        Item currentItem = getCurrentItem(userId);
+        return determNextItem(currentItem);
+    }
 
-        Item nextItem = determNextItem(currentItemId);
-        saveCurrentItem(userId, nextItem != null ? nextItem.getId() : null);
+    public Item moveToNextItem(UUID userId) {
+        Item currentItem = getCurrentItem(userId);
+        return moveToNextItem(userId, currentItem);
+    }
+
+    public Item moveToNextItem(UUID userId, Item currentItem) {
+        Item nextItem = determNextItem(currentItem);
+        saveCurrentItem(userId, nextItem);
 
         return nextItem;
     }
 
-    private Item determNextItem(Long currentItemId) {
+    private Item determNextItem(Item currentItem) {
         Item nextItem = null;
-        if (currentItemId == null) {
+        if (currentItem == null) {
             nextItem = getFirstItem();
         } else {
-            Item currentItem = itemRepository.getOne(currentItemId);
             if (currentItem.getNextItemId() != null) {
-                nextItem = itemRepository.getOne(currentItem.getNextItemId());
+                nextItem = itemRepository.findOne(currentItem.getNextItemId());
             }
         }
         return nextItem;
+    }
+
+    private Item getCurrentItem(UUID userId) {
+        CurrentItem currentUserItem = currentItemRepository.findOne(userId);
+
+        Long currentItemId = (currentUserItem != null) ? currentUserItem.getItemId() : null;
+
+        if (currentItemId == null) {
+            return null;
+        }
+
+        return itemRepository.getOne(currentItemId);
+    }
+
+    private void saveCurrentItem(UUID userId, Item currentItem){
+        saveCurrentItem(userId, currentItem != null ? currentItem.getId() : null);
     }
 
     private void saveCurrentItem(UUID userId, Long nextItemId) {
@@ -61,5 +84,23 @@ public class QuestionnaireService {
         }
         currentUserItem.setItemId(nextItemId);
         currentItemRepository.save(currentUserItem);
+    }
+
+    public void saveAnswer(UUID userId, Long itemId) {
+        Item currentItem = getCurrentItem(userId);
+        Assert.isTrue(currentItem != null, "Current item of this user is null");
+        Assert.isTrue(currentItem.getType() == Item.Type.QUESTION, "Current item is not question");
+
+        Item answerItem = itemRepository.findOne(itemId);
+        Assert.isTrue(currentItem.getId() == answerItem.getParentItemId(), "Answer is not suitable for question");
+        saveCurrentItem(userId, currentItem);
+
+        moveToNextItem(userId, currentItem);
+
+
+    }
+
+    public void saveAnswer(UUID userId, Object value) {
+
     }
 }

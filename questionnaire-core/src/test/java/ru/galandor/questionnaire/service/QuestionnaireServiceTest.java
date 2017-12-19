@@ -35,12 +35,17 @@ public class QuestionnaireServiceTest extends QuestionnaireApplicationTest {
             nextItem = questionnaireAdminController.add(item);
         }
 
-        // fetch item for new user
+        // fetch next item
         Item firsttem = questionnaireService.getNextItem(TEST_USER);
         Assert.assertNotNull(firsttem);
 
+        // fetch item for new user
+        Item currentItem = questionnaireService.moveToNextItem(TEST_USER);
+        Assert.assertNotNull(currentItem);
+
+
         // fetch next item
-        Item currentItem = questionnaireService.getNextItem(TEST_USER);
+        currentItem = questionnaireService.getNextItem(TEST_USER);
         Assert.assertNotNull(currentItem);
 
         Assert.assertNotEquals(firsttem, currentItem);
